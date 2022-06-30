@@ -72,3 +72,13 @@ Nginx+uwsgi
 * celery   
 [http://docs.jinkan.org/docs/celery/](http://docs.jinkan.org/docs/celery/)   
 
+创建虚拟环境  
+virtualenv lzz 
+进入虚拟环境  
+.\Scripts\activate
+生成迁移文件  
+python manage.py makemigrations  
+执行迁移文件  
+python manage.py migrate 
+ 
+
