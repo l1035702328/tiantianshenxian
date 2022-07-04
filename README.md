@@ -83,5 +83,7 @@ python manage.py makemigrations
 python manage.py migrate 
 启动
 python manage.py runserver
- 
-
+redis  
+redis-cli
+#celery消费  
+celery -A celery_tasks.tasks worker -l info -P eventlet

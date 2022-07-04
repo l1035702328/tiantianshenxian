@@ -1,13 +1,15 @@
 import re
 
 from django.conf import settings
+from django.core.mail import send_mail
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-
+from celery_tasks.tasks import send_register_active_email
 
 # Create your views here.
 from django.urls import reverse
 from django.views import View
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired
 from apps.user.models import User
 
 
@@ -81,6 +83,40 @@ class RegisterView(View):
         serializer = Serializer(settings.SECRET_KEY, 3600)
         info = {"confirm": user.id}
         token = serializer.dumps(info).decode("utf8")
-        # 发邮件
+        # # 利用celery异步发邮件经过task装饰有了delay
+        send_register_active_email.delay(email, username, token)
+        # subject = '天天生鲜欢迎信息'
+        # message = '邮件正文'
+        # html_message = '<h1>%s, 欢迎您成为天天生鲜注册会员' \
+        #                    '</h1>请点击下面链接激活您的账户<br/>' \
+        #                '<a href="http://127.0.0.1:8000/user/active/%s">' \
+        #                'http://127.0.0.1:8000/user/active/%s' \
+        #                '</a>' % (username, token, token)
+        # sender = settings.EMAIL_FROM
+        # receiver = [email]
+        # send_mail(subject, message, sender, receiver,html_message=html_message)
         # 返回应答
         return redirect(reverse('goods:index'))
+
+class ActiveView(View):
+    '''用户激活'''
+    def get(self, request, token):
+        '''进行用户激活'''
+        # 进行解密,获取要激活的用户信息
+        serializer = Serializer(settings.SECRET_KEY, 3600)
+        try:
+            info = serializer.loads(token)
+            user_id = info['confirm']
+            user = User.objects.get(id=user_id)
+            user.is_active = 1
+            user.save()
+            # 跳转到登录页面
+            return redirect(reverse('user:login'))
+        except SignatureExpired as e:
+            # 激活链接已过期
+            return HttpResponse("激活链接已过期")
+
+class LoginView(View):
+    '''登录'''
+    def get(self, request):
+        return render(request, 'login.html')

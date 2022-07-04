@@ -167,3 +167,13 @@ HAYSTACK_CONNECTIONS = {
 # 当添加、修改、删除数据时，自动生成索引
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 6  # 指定搜索结果每页显示多少条信息
+
+# 邮件发送配置
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'l1035702328@163.com'
+EMAIL_HOST_PASSWORD = 'SDTWLHAEHHRAAXDP'
+# DEFAULT_FROM_EMAIL = 'l1035702328@163.com'
+# 收件人看到的发件人
+EMAIL_FROM = '天天生鲜<l1035702328@163.com>'
