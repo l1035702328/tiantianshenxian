@@ -87,3 +87,9 @@ redis
 redis-cli
 #celery消费  
 celery -A celery_tasks.tasks worker -l info -P eventlet
+
+#redis session缓存查询
+select 9 
+keys *
+#清空key
+flushdb

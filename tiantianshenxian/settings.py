@@ -187,9 +187,16 @@ CACHES = {
         "LOCATION": "redis://127.0.0.1:6379/9",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
+        },
     }
 }
 # 配置session存储
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+SESSION_COOKIE_AGE = 1209600             # Session的cookie失效日期（2周）（数字为秒数）（默认）
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # 是否关闭浏览器使得Session过期（默认）
+
+
+
+# 配置登录url地址
+LOGIN_URL = '/user/login'
