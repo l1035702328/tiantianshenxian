@@ -177,14 +177,14 @@ EMAIL_HOST_PASSWORD = 'SDTWLHAEHHRAAXDP'
 # DEFAULT_FROM_EMAIL = 'l1035702328@163.com'
 # 收件人看到的发件人
 EMAIL_FROM = '天天生鲜<l1035702328@163.com>'
-# 不想判别is_action状态
+# 不想判别用户表is_action状态
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
 
 # 利用django redis作缓存
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/9",
+        "LOCATION": "redis://119.91.55.183:6379/9",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
