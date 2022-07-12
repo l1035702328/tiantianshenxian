@@ -6,5 +6,5 @@ from apps.goods.models import GoodsType, IndexPromotionBanner, IndexGoodsBanner,
 from django.contrib import admin
 
 # Register your models here.
-
+admin.site.register(GoodsType)
 

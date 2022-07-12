@@ -196,7 +196,18 @@ SESSION_CACHE_ALIAS = "default"
 SESSION_COOKIE_AGE = 1209600             # Session的cookie失效日期（2周）（数字为秒数）（默认）
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # 是否关闭浏览器使得Session过期（默认）
 
-
-
 # 配置登录url地址
 LOGIN_URL = '/user/login'
+
+# 设置Django的文件存储类
+DEFAULT_FILE_STORAGE = 'utils.fdfs.storage.FDFSStorage'
+
+# 设置fdfs使用的client.conf文件路径
+# FDFS_CLIENT_CONF = './utils/fdfs/client.conf'
+# FDFS_CLIENT_CONF = r'F:\tiantianshenxian\tiantianshenxian\utils\fdfs\client.conf'
+FDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'utils/fdfs/client.conf')
+
+# 设置fdfs存储服务器上nginx的IP和端口号
+FDFS_URL = 'http://119.91.55.183:8888/'
+
+

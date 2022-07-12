@@ -6,6 +6,8 @@ from django.core.mail import send_mail
 from django.forms import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+
+from apps.goods.models import GoodsSKU
 from celery_tasks.tasks import send_register_active_email
 
 # Create your views here.
@@ -13,6 +15,7 @@ from django.urls import reverse
 from django.views import View
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired
 from apps.user.models import User, Address
+from django_redis import get_redis_connection
 
 # def register(request):
 #     print(request.method)
@@ -177,10 +180,33 @@ class UserInfoView(LoginRequiredMixin, View):
         # 如果用户登录->user是User类的一个实例
         # request.user.is_authenticated()
         # 获取用户的个人信息
+        user = request.user
+        address = Address.objects.get_default_address(user)
         # 获取用户的历史浏览记录
-
+        # from redis import StrictRedis
+        # strict_redis = StrictRedis(host='127.0.0.1', port='6378', db=9)
+        con = get_redis_connection('default')
+        history_key = 'history_%d' % user.id
+        # 获取用户最新浏览的5个商品的id
+        sku_ids = con.lrange(history_key, 0, 4)
+        # 从数据库中查询用户浏览的商品的具体信息
+        # goods_li = GoodsSKU.objects.filter(id__in=sku_ids)
+        # goods_res = []
+        # for sku_id in sku_ids:
+        #     for goods in goods_li:
+        #         if sku_id == goods:
+        #             goods_res.append(goods)
+        goods_li = []
+        for sku_id in sku_ids:
+            goods = GoodsSKU.objects.get(id=sku_id)
+            goods_li.append(goods)
+        # 组织上下文
+        context = {'page': 'user',
+                   'address': address,
+                   'goods_li': goods_li
+                   }
         # 除了你给模板文件传递的模板变量之外,django框架会把request.user也传给模板文件
-        return render(request, 'user_center_info.html', {'page': 'user'})
+        return render(request, 'user_center_info.html', context)
 
 
 # /user/order

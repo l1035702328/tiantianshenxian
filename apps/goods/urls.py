@@ -6,5 +6,5 @@ from . import views
 
 
 urlpatterns = [
-    path('index', views.index, name='index')
+    path('index', views.IndexView.as_view(), name='index') # 首页
 ]

@@ -93,3 +93,6 @@ select 9
 keys *
 #清空key
 flushdb
+
+#fastdfs解决的问题
+海量存储 高拓展 文件内容重复
