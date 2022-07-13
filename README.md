@@ -81,6 +81,10 @@ lzz\Scripts\activate
 python manage.py makemigrations  
 执行迁移文件  
 python manage.py migrate 
+
+# 数据库需要指定编码格式否则迁移时会报错
+DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
 启动
 python manage.py runserver
 redis  
@@ -93,6 +97,24 @@ select 9
 keys *
 #清空key
 flushdb
-
+#mysql
+docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=LIJINfei1837463 -d mysql:5.7.38
 #fastdfs解决的问题
 海量存储 高拓展 文件内容重复
+#docker 安装
+# pull image
+docker pull pad0y/fdfs:v3
+# 当storage和tracker在同宿主机时，必须使用host模式，否则文件上传返回storage内部地址，外部访问无法使用
+# MASTER_IP填写自己服务器的ip
+docker run -d --name fdfs\
+    -p 8888:8888 \
+    -p 22122:22122 \
+    -p 23000:23000 \
+    -e TZ=Asia/Shanghai \
+    -e NET_VAR=eth0 \
+    -e MASTER_IP=119.91.55.183\
+    -v /mnt/fdfs:/var/local/fdfs \
+    pad0y/fdfs:v3
+
+docker exec -it 69d1 bash
+/var/local/fdfs/tiantianshenxian/static
