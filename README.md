@@ -72,6 +72,9 @@ Nginx+uwsgi
 * celery   
 [http://docs.jinkan.org/docs/celery/](http://docs.jinkan.org/docs/celery/)   
 
+
+![img.png](img.png)
+
 创建虚拟环境  
 virtualenv lzz 
 进入虚拟环境  
@@ -87,6 +90,9 @@ DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 启动
 python manage.py runserver
+创建admin用户
+python manage.py createsuperuser
+
 redis  
 redis-cli
 #celery消费  

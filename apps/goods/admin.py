@@ -4,6 +4,7 @@ from apps.goods.models import GoodsType, IndexPromotionBanner, IndexGoodsBanner,
 # Register your models here.
 from django.contrib import admin
 
+
 class BaseModelAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         '''新增或更新表中的数据时调用'''
@@ -11,6 +12,8 @@ class BaseModelAdmin(admin.ModelAdmin):
         # 发出任务,让celeray worker 重新生成首页静态页
         from celery_tasks.tasks import generate_static_index_html
         generate_static_index_html.delay()
+        # 清除首页缓存
+        cache.delete('index_page_data')
 
     def delete_model(self, request, obj):
         '''删除表中的数据时调用'''
@@ -18,7 +21,8 @@ class BaseModelAdmin(admin.ModelAdmin):
         # 发出任务,让celery worker重新生成首页静态页
         from celery_tasks.tasks import generate_static_index_html
         generate_static_index_html.delay()
-
+        # 清除首页缓存
+        cache.delete('index_page_data')
 
 class GoodsTypeAdmin(BaseModelAdmin):
     pass
@@ -36,9 +40,12 @@ class IndexPromotionBannerAdmin(BaseModelAdmin):
     pass
 
 
+class GoodsSKUAdmin(BaseModelAdmin):
+    pass
+
 # Register your models here.
 admin.site.register(GoodsType, GoodsTypeAdmin)
 admin.site.register(IndexGoodsBanner, IndexGoodsBannerAdmin)
 admin.site.register(IndexTypeGoodsBanner, IndexTypeGoodsBannerAdmin)
 admin.site.register(IndexPromotionBanner, IndexPromotionBannerAdmin)
-
+admin.site.register(GoodsSKU, GoodsSKUAdmin)
