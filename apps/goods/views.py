@@ -123,7 +123,7 @@ class ListView(View):
         # sort = default 按照默认id排序
         # sort = price 按照商品价格排序
         # sort = hot 按照商品销量排序
-        sort =request.Get.get('sort')
+        sort =request.GET.get('sort')
         if sort == "price":
             skus = GoodsSKU.objects.filter(type=type).order_by("price")
         elif sort == "hot":
@@ -145,6 +145,25 @@ class ListView(View):
 
         # 获取第page页的Page实例对象
         skus_page = paginator.page(page)
+        # 进行页码的控制,页面上最多显示5个页码
+        # 1.总页数小于5页,页面上显示所有页码
+        # 2.如果当前页是前3页,显示1-5页
+        # 3.如果当前页是后3页,显示后5页
+        # 4.其他情况，显示当前页的前2页，当前页，当前页的后2页
+        num_pages = paginator.num_pages
+        print(num_pages)
+        if num_pages < 5:
+            if num_pages < 5:
+                pages = range(1, num_pages+1)
+        elif page <= 3:
+            pages = range(1, 6)
+        elif num_pages-page <= 2:
+            pages = range(num_pages-4, num_pages+1)
+        else:
+            pages = range(page-2, page+3)
+
+
+
         # 获取新品信息
         new_skus = GoodsSKU.objects.filter(type=type).order_by('-create_time')[:2]
         # 获取用户购物车商品的数目
@@ -162,6 +181,7 @@ class ListView(View):
             'types': types,
             'skus_page': skus_page,
             'new_skus': new_skus,
+            'pages': pages,
             'cart_count': cart_count
         }
         # 使用模板
