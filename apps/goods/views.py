@@ -151,7 +151,6 @@ class ListView(View):
         # 3.如果当前页是后3页,显示后5页
         # 4.其他情况，显示当前页的前2页，当前页，当前页的后2页
         num_pages = paginator.num_pages
-        print(num_pages)
         if num_pages < 5:
             if num_pages < 5:
                 pages = range(1, num_pages+1)

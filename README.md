@@ -124,3 +124,6 @@ docker run -d --name fdfs\
 
 docker exec -it 69d1 bash
 /var/local/fdfs/tiantianshenxian/static
+
+# 建立索引
+python .\manage.py rebuild_index
