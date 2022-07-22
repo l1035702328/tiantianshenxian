@@ -127,3 +127,5 @@ docker exec -it 69d1 bash
 
 # 建立索引
 python .\manage.py rebuild_index
+# haystack 替换jieba分词
+https://blog.csdn.net/weixin_42134789/article/details/119620873
