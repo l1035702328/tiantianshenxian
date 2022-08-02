@@ -19,7 +19,7 @@ urlpatterns = [
     # path('logout', views.LogoutView.as_view(), name='logout')
     # 利用多继承实现
     path('', login_required(views.UserInfoView.as_view()), name='user'),
-    path('order', views.UserOrderView.as_view(), name='order'),
+    path('order/<str:page>', views.UserOrderView.as_view(), name='order'),
     path('address', views.AddressView.as_view(), name='address'),
     path('logout', views.LogoutView.as_view(), name='logout')
 ]

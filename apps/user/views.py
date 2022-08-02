@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from apps.goods.models import GoodsSKU
+from apps.order.models import OrderInfo, OrderGoods
 from celery_tasks.tasks import send_register_active_email
 
 # Create your views here.
@@ -211,10 +212,15 @@ class UserInfoView(LoginRequiredMixin, View):
 
 # /user/order
 class UserOrderView(LoginRequiredMixin, View):
-    def get(self,request):
+    def get(self, request, page):
         '''用户中心-订单页'''
         # 获取用户的订单信息
-
+        user = request.user
+        orders = OrderInfo.objects.filter(user=user)
+        for order in orders:
+            # 根据order_id查询订单商品信息
+            order_skus = OrderGoods.objects.filter(order_id=order.order_id)
+        # 遍历商品的小计
         return render(request, 'user_center_order.html', {'page': 'order'})
 
 
